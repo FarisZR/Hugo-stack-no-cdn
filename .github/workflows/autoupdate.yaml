@@ -1,0 +1,43 @@
+name: Check for updates and download files.
+
+on:
+  # Possibility to run it manually
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/autoupdate.yaml
+      - .automation//*
+  # Automated
+  schedule:
+    # Run Every day
+    - cron: '0 0 * * *'
+
+jobs:
+  check-for-updates:
+    runs-on: ubuntu-latest
+    outputs:
+      vibrant: ${{ steps.check.outputs.vibrant-out-of-date }}
+      photoswipe0: ${{ steps.check.outputs.photoswipe0-out-of-date }}
+      photoswipe1: ${{ steps.check.outputs.photoswipe1-out-of-date }}
+      photoswipe2: ${{ steps.check.outputs.photoswipe2-out-of-date }}
+      photoswipe3: ${{ steps.check.outputs.photoswipe3-out-of-date }}
+      katex0: ${{ steps.check.outputs.katex0-out-of-date }}
+      katex1: ${{ steps.check.outputs.katex1-out-of-date }}
+      katex2: ${{ steps.check.outputs.katex2-out-of-date }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: download latest external.yaml file and compare hashes
+        id: check
+        run: |
+          wget https://raw.githubusercontent.com/CaiJimmy/hugo-theme-stack/master/data/external.yaml
+          sh .automation/hash-check.sh data/external.yaml external.yaml Vibrant 0 vibrant-out-of-date
+          sh .automation/hash-check.sh data/external.yaml external.yaml PhotoSwipe 0 photoSwipe0-out-of-date
+          sh .automation/hash-check.sh data/external.yaml external.yaml PhotoSwipe 1 photoSwipe1-out-of-date
+          sh .automation/hash-check.sh data/external.yaml external.yaml PhotoSwipe 2 photoSwipe2-out-of-date
+          sh .automation/hash-check.sh data/external.yaml external.yaml PhotoSwipe 3 photoSwipe3-out-of-date
+          sh .automation/hash-check.sh data/external.yaml external.yaml KaTeX 0 katex0-out-of-date
+          sh .automation/hash-check.sh data/external.yaml external.yaml KaTeX 1 katex1-out-of-date
+          sh .automation/hash-check.sh data/external.yaml external.yaml KaTeX 2 katex2-out-of-date
+
