@@ -28,16 +28,36 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      # setup python
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools
+          python -m pip install -U pip wheel
+          python -m pip install shyaml
+
       - name: download latest external.yaml file and compare hashes
         id: check
         run: |
           wget https://raw.githubusercontent.com/CaiJimmy/hugo-theme-stack/master/data/external.yaml
-          sh .automation/hash-check.sh data/external.yaml external.yaml Vibrant 0 vibrant-out-of-date
-          sh .automation/hash-check.sh data/external.yaml external.yaml PhotoSwipe 0 photoSwipe0-out-of-date
-          sh .automation/hash-check.sh data/external.yaml external.yaml PhotoSwipe 1 photoSwipe1-out-of-date
-          sh .automation/hash-check.sh data/external.yaml external.yaml PhotoSwipe 2 photoSwipe2-out-of-date
-          sh .automation/hash-check.sh data/external.yaml external.yaml PhotoSwipe 3 photoSwipe3-out-of-date
-          sh .automation/hash-check.sh data/external.yaml external.yaml KaTeX 0 katex0-out-of-date
-          sh .automation/hash-check.sh data/external.yaml external.yaml KaTeX 1 katex1-out-of-date
-          sh .automation/hash-check.sh data/external.yaml external.yaml KaTeX 2 katex2-out-of-date
+          bash .automation/hash-check.sh data/external.yaml external.yaml Vibrant 0 integrity vibrant-out-of-date
+          bash .automation/hash-check.sh data/external.yaml external.yaml PhotoSwipe 0 integrity photoSwipe0-out-of-date
+          bash .automation/hash-check.sh data/external.yaml external.yaml PhotoSwipe 1 integrity photoSwipe1-out-of-date
+          bash .automation/hash-check.sh data/external.yaml external.yaml PhotoSwipe 2 src photoSwipe2-out-of-date
+          bash .automation/hash-check.sh data/external.yaml external.yaml PhotoSwipe 3 src photoSwipe3-out-of-date
+          bash .automation/hash-check.sh data/external.yaml external.yaml KaTeX 0 integrity katex0-out-of-date
+          bash .automation/hash-check.sh data/external.yaml external.yaml KaTeX 1 integrity katex1-out-of-date
+          bash .automation/hash-check.sh data/external.yaml external.yaml KaTeX 2 integrity katex2-out-of-date
 
+      - name: Cache pip files
+        uses: actions/cache@v3.0.4
+        env:
+          cache-name: pip-reg
+        with:
+          path: $HOME/.cache/pip
+          key: pip-reg
