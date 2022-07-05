@@ -45,14 +45,14 @@ jobs:
         id: check
         run: |
           wget https://raw.githubusercontent.com/CaiJimmy/hugo-theme-stack/master/data/external.yaml
-          bash .automation/hash-check.sh data/external.yaml external.yaml Vibrant 0 integrity vibrant-out-of-date
-          bash .automation/hash-check.sh data/external.yaml external.yaml PhotoSwipe 0 integrity photoSwipe0-out-of-date
-          bash .automation/hash-check.sh data/external.yaml external.yaml PhotoSwipe 1 integrity photoSwipe1-out-of-date
-          bash .automation/hash-check.sh data/external.yaml external.yaml PhotoSwipe 2 src photoSwipe2-out-of-date
-          bash .automation/hash-check.sh data/external.yaml external.yaml PhotoSwipe 3 src photoSwipe3-out-of-date
-          bash .automation/hash-check.sh data/external.yaml external.yaml KaTeX 0 integrity katex0-out-of-date
-          bash .automation/hash-check.sh data/external.yaml external.yaml KaTeX 1 integrity katex1-out-of-date
-          bash .automation/hash-check.sh data/external.yaml external.yaml KaTeX 2 integrity katex2-out-of-date
+          bash .automation/hash-check.sh data/external.yaml external.yaml Vibrant 0 integrity integrity vibrant-out-of-date
+          bash .automation/hash-check.sh data/external.yaml external.yaml PhotoSwipe 0 integrity integrity photoSwipe0-out-of-date
+          bash .automation/hash-check.sh data/external.yaml external.yaml PhotoSwipe 1 integrity integrity photoSwipe1-out-of-date
+          bash .automation/hash-check.sh data/external.yaml external.yaml PhotoSwipe 2 src original-src photoSwipe2-out-of-date
+          bash .automation/hash-check.sh data/external.yaml external.yaml PhotoSwipe 3 src original-src photoSwipe3-out-of-date
+          bash .automation/hash-check.sh data/external.yaml external.yaml KaTeX 0 integrity integrity katex0-out-of-date
+          bash .automation/hash-check.sh data/external.yaml external.yaml KaTeX 1 integrity integrity katex1-out-of-date
+          bash .automation/hash-check.sh data/external.yaml external.yaml KaTeX 2 integrity integrity katex2-out-of-date
 
       - name: Cache pip files
         uses: actions/cache@v3.0.4
