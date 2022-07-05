@@ -6,7 +6,7 @@ on:
   push:
     paths:
       - .github/workflows/autoupdate.yaml
-      - .automation//*
+      - .automation/*
   # Automated
   schedule:
     # Run Every day
