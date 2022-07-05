@@ -10,7 +10,7 @@ on:
   # Automated
   schedule:
     # Run Every day
-    - cron: '0 0 * * *'
+    - cron: "0 0 * * *"
 
 jobs:
   check-for-updates:
@@ -61,3 +61,457 @@ jobs:
         with:
           path: $HOME/.cache/pip
           key: pip-reg
+
+  update-vibrant:
+    needs: check-for-updates
+    if: ${{ needs.check-for-updates.outputs.vibrant == 'true' }}
+    runs-on: ubuntu-latest
+    env:
+      FILE: static/js/vibrant.in.js
+      FILE_NAME: Vibrant
+      ROW: 0
+      URL_ONLY: false
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # setup python
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+
+      - name: Install shyaml
+        run: |
+          python -m pip install --upgrade pip setuptools
+          python -m pip install -U pip wheel
+          python -m pip install shyaml
+
+      - name: Update File
+        run: |
+          wget https://raw.githubusercontent.com/CaiJimmy/hugo-theme-stack/master/data/external.yaml
+          wget $(cat external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.src) -O ${{ env.FILE }}
+
+      - name: Update file hash
+        if: ${{ env.URL_ONLY == 'false' }}
+        run: sed -i "s@$(cat data/external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.integrity)@$(echo sha256-$(openssl dgst -sha256 -binary ${{ env.FILE }} | openssl base64 -A))@g" ./data/external.yaml
+
+      - name: Update file original-src
+        if: ${{ env.URL_ONLY == 'true' }}
+        run: sed -i "s!$(cat data/external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.original-src)!$(cat external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.src)!g" ./data/external.yaml
+
+      - name: Commit
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git pull
+          git add ${{ env.FILE }}
+          git add data/external.yaml
+          git commit -m "update ${{ env.FILE }}"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+
+  update-photoswipe0:
+    needs: check-for-updates
+    if: ${{ needs.check-for-updates.outputs.photoswipe0 == 'true' }}
+    runs-on: ubuntu-latest
+    env:
+      FILE: static/js/photoswipe.min.js
+      FILE_NAME: PhotoSwipe
+      ROW: 0
+      URL_ONLY: false
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # setup python
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+
+      - name: Install shyaml
+        run: |
+          python -m pip install --upgrade pip setuptools
+          python -m pip install -U pip wheel
+          python -m pip install shyaml
+
+      - name: Update File
+        run: |
+          wget https://raw.githubusercontent.com/CaiJimmy/hugo-theme-stack/master/data/external.yaml
+          wget $(cat external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.src) -O ${{ env.FILE }}
+
+      - name: Update file hash
+        if: ${{ env.URL_ONLY == 'false' }}
+        run: sed -i "s@$(cat data/external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.integrity)@$(echo sha256-$(openssl dgst -sha256 -binary ${{ env.FILE }} | openssl base64 -A))@g" ./data/external.yaml
+
+      - name: Update file original-src
+        if: ${{ env.URL_ONLY == 'true' }}
+        run: sed -i "s!$(cat data/external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.original-src)!$(cat external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.src)!g" ./data/external.yaml
+
+      - name: Commit
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git pull
+          git add ${{ env.FILE }}
+          git add data/external.yaml
+          git commit -m "update ${{ env.FILE }}"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+
+  update-photoswipe1:
+    needs: check-for-updates
+    if: ${{ needs.check-for-updates.outputs.photoswipe1 == 'true' }}
+    runs-on: ubuntu-latest
+    env:
+      FILE: static/js/photoswipe-ui-default.min.js
+      FILE_NAME: PhotoSwipe
+      ROW: 1
+      URL_ONLY: false
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # setup python
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+
+      - name: Install shyaml
+        run: |
+          python -m pip install --upgrade pip setuptools
+          python -m pip install -U pip wheel
+          python -m pip install shyaml
+
+      - name: Update File
+        run: |
+          wget https://raw.githubusercontent.com/CaiJimmy/hugo-theme-stack/master/data/external.yaml
+          wget $(cat external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.src) -O ${{ env.FILE }}
+
+      - name: Update file hash
+        if: ${{ env.URL_ONLY == 'false' }}
+        run: sed -i "s@$(cat data/external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.integrity)@$(echo sha256-$(openssl dgst -sha256 -binary ${{ env.FILE }} | openssl base64 -A))@g" ./data/external.yaml
+
+      - name: Update file original-src
+        if: ${{ env.URL_ONLY == 'true' }}
+        run: sed -i "s!$(cat data/external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.original-src)!$(cat external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.src)!g" ./data/external.yaml
+
+      - name: result
+        run: cat data/external.yaml
+
+      # - name: Commit
+      #   run: |
+      #     git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      #     git config --local user.name "github-actions[bot]"
+      #     git pull
+      #     git add ${{ env.FILE }}
+      #     git add data/external.yaml
+      #     git commit -m "update ${{ env.FILE }}"
+
+      # - name: Push changes
+      #   uses: ad-m/github-push-action@master
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     branch: ${{ github.ref }}
+
+  update-photoswipe2:
+    needs: check-for-updates
+    if: ${{ needs.check-for-updates.outputs.photoswipe2 == 'true' }}
+    runs-on: ubuntu-latest
+    env:
+      FILE: static/js/default-skin.min.css
+      FILE_NAME: PhotoSwipe
+      ROW: 2
+      URL_ONLY: true
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # setup python
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+
+      - name: Install shyaml
+        run: |
+          python -m pip install --upgrade pip setuptools
+          python -m pip install -U pip wheel
+          python -m pip install shyaml
+
+      - name: Update File
+        run: |
+          wget https://raw.githubusercontent.com/CaiJimmy/hugo-theme-stack/master/data/external.yaml
+          wget $(cat external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.src) -O ${{ env.FILE }}
+
+      - name: Update file hash
+        if: ${{ env.URL_ONLY == 'false' }}
+        run: sed -i "s@$(cat data/external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.integrity)@$(echo sha256-$(openssl dgst -sha256 -binary ${{ env.FILE }} | openssl base64 -A))@g" ./data/external.yaml
+
+      - name: Update file original-src
+        if: ${{ env.URL_ONLY == 'true' }}
+        run: sed -i "s!$(cat data/external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.original-src)!$(cat external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.src)!g" ./data/external.yaml
+
+      - name: result
+        run: cat data/external.yaml
+
+      # - name: Commit
+      #   run: |
+      #     git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      #     git config --local user.name "github-actions[bot]"
+      #     git pull
+      #     git add ${{ env.FILE }}
+      #     git add data/external.yaml
+      #     git commit -m "update ${{ env.FILE }}"
+
+      # - name: Push changes
+      #   uses: ad-m/github-push-action@master
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     branch: ${{ github.ref }}
+
+  update-photoswipe3:
+    needs: check-for-updates
+    if: ${{ needs.check-for-updates.outputs.photoswipe3 == 'true' }}
+    runs-on: ubuntu-latest
+    env:
+      FILE: static/js/photoswipe.min.css
+      FILE_NAME: PhotoSwipe
+      ROW: 3
+      URL_ONLY: true
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # setup python
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+
+      - name: Install shyaml
+        run: |
+          python -m pip install --upgrade pip setuptools
+          python -m pip install -U pip wheel
+          python -m pip install shyaml
+
+      - name: Update File
+        run: |
+          wget https://raw.githubusercontent.com/CaiJimmy/hugo-theme-stack/master/data/external.yaml
+          wget $(cat external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.src) -O ${{ env.FILE }}
+
+      - name: Update file hash
+        if: ${{ env.URL_ONLY == 'false' }}
+        run: sed -i "s@$(cat data/external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.integrity)@$(echo sha256-$(openssl dgst -sha256 -binary ${{ env.FILE }} | openssl base64 -A))@g" ./data/external.yaml
+
+      - name: Update file original-src
+        if: ${{ env.URL_ONLY == 'true' }}
+        run: sed -i "s!$(cat data/external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.original-src)!$(cat external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.src)!g" ./data/external.yaml
+
+      - name: Commit
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git pull
+          git add ${{ env.FILE }}
+          git add data/external.yaml
+          git commit -m "update ${{ env.FILE }}"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+
+  update-katek0:
+    needs: check-for-updates
+    if: ${{ needs.check-for-updates.outputs.katex0 == 'true' }}
+    runs-on: ubuntu-latest
+    env:
+      FILE: static/js/katex.min.css
+      FILE_NAME: KaTeX
+      ROW: 0
+      URL_ONLY: false
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # setup python
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+
+      - name: Install shyaml
+        run: |
+          python -m pip install --upgrade pip setuptools
+          python -m pip install -U pip wheel
+          python -m pip install shyaml
+
+      - name: Update File
+        run: |
+          wget https://raw.githubusercontent.com/CaiJimmy/hugo-theme-stack/master/data/external.yaml
+          wget $(cat external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.src) -O ${{ env.FILE }}
+
+      - name: Update file hash
+        if: ${{ env.URL_ONLY == 'false' }}
+        run: sed -i "s@$(cat data/external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.integrity)@$(echo sha256-$(openssl dgst -sha256 -binary ${{ env.FILE }} | openssl base64 -A))@g" ./data/external.yaml
+
+      - name: Update file original-src
+        if: ${{ env.URL_ONLY == 'true' }}
+        run: sed -i "s!$(cat data/external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.original-src)!$(cat external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.src)!g" ./data/external.yaml
+
+      - name: Commit
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git pull
+          git add ${{ env.FILE }}
+          git add data/external.yaml
+          git commit -m "update ${{ env.FILE }}"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+
+  update-katek1:
+    needs: check-for-updates
+    if: ${{ needs.check-for-updates.outputs.katex1 == 'true' }}
+    runs-on: ubuntu-latest
+    env:
+      FILE: static/js/katex.min.js
+      FILE_NAME: KaTeX
+      ROW: 1
+      URL_ONLY: false
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # setup python
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+
+      - name: Install shyaml
+        run: |
+          python -m pip install --upgrade pip setuptools
+          python -m pip install -U pip wheel
+          python -m pip install shyaml
+
+      - name: Update File
+        run: |
+          wget https://raw.githubusercontent.com/CaiJimmy/hugo-theme-stack/master/data/external.yaml
+          wget $(cat external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.src) -O ${{ env.FILE }}
+
+      - name: Update file hash
+        if: ${{ env.URL_ONLY == 'false' }}
+        run: sed -i "s@$(cat data/external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.integrity)@$(echo sha256-$(openssl dgst -sha256 -binary ${{ env.FILE }} | openssl base64 -A))@g" ./data/external.yaml
+
+      - name: Update file original-src
+        if: ${{ env.URL_ONLY == 'true' }}
+        run: sed -i "s!$(cat data/external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.original-src)!$(cat external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.src)!g" ./data/external.yaml
+
+      - name: Commit
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git pull
+          git add ${{ env.FILE }}
+          git add data/external.yaml
+          git commit -m "update ${{ env.FILE }}"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+
+  update-katek2:
+    needs: check-for-updates
+    if: ${{ needs.check-for-updates.outputs.katex2 == 'true' }}
+    runs-on: ubuntu-latest
+    env:
+      FILE: static/js/auto-render.min.js
+      FILE_NAME: KaTeX
+      ROW: 2
+      URL_ONLY: false
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # setup python
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+
+      - name: Install shyaml
+        run: |
+          python -m pip install --upgrade pip setuptools
+          python -m pip install -U pip wheel
+          python -m pip install shyaml
+
+      - name: Update File
+        run: |
+          wget https://raw.githubusercontent.com/CaiJimmy/hugo-theme-stack/master/data/external.yaml
+          wget $(cat external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.src) -O ${{ env.FILE }}
+
+      - name: Update file hash
+        if: ${{ env.URL_ONLY == 'false' }}
+        run: sed -i "s@$(cat data/external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.integrity)@$(echo sha256-$(openssl dgst -sha256 -binary ${{ env.FILE }} | openssl base64 -A))@g" ./data/external.yaml
+
+      - name: Update file original-src
+        if: ${{ env.URL_ONLY == 'true' }}
+        run: sed -i "s!$(cat data/external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.original-src)!$(cat external.yaml | shyaml get-value ${{ env.FILE_NAME }}.${{ env.ROW }}.src)!g" ./data/external.yaml
+
+      - name: Commit
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git pull
+          git add ${{ env.FILE }}
+          git add data/external.yaml
+          git commit -m "update ${{ env.FILE }}"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
