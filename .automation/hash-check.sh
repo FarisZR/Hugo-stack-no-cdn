@@ -1,6 +1,6 @@
 #/bin/sh
 
-# 1=remote file name 2=local-file 3=js file name 4=which row 5=entry from remote 6=entry from local 6=var-name
+# 1=remote file name 2=local-file 3=js file name 4=which row 5=entry from remote 6=entry from local 7=var-name
 #Get value from the local file and remote file, and compare 
 
 remote=$(cat $1 | shyaml get-value $3.$4.$5)
